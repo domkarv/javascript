@@ -1,9 +1,43 @@
-const st = [];
+class Queue {
+  #items;
 
-st.push(34);
-st.push(86);
-st.push(45);
-st.push(56);
-st.pop()
+  constructor() {
+    this.#items = [];
+  }
 
-console.log(st);
+  enqueue(val) {
+    this.#items.push(val);
+  }
+
+  dequeue() {
+    this.#items.shift();
+  }
+
+  peek() {
+    return this.#items[0];
+  }
+
+  isEmpty() {
+    return this.#items.length === 0;
+  }
+
+  size() {
+    return this.#items.length;
+  }
+
+  print() {
+    console.log(this.#items.toString());
+  }
+}
+
+const qu = new Queue();
+
+qu.enqueue(34);
+qu.enqueue(54);
+qu.enqueue(76);
+qu.enqueue(89);
+qu.dequeue();
+
+console.log(qu.peek());
+
+qu.print()
