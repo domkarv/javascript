@@ -1,87 +1,169 @@
-class CircularQueue {
-  #items;
-  #capacity;
-  #front;
-  #rear;
-  #currentLength;
+class LNode {
+  value;
+  next;
 
-  constructor(capacity) {
-    this.#items = new Array(capacity);
-    this.#capacity = capacity;
-    this.#rear = -1;
-    this.#front = -1;
-    this.#currentLength = 0;
+  constructor(value) {
+    this.value = value;
+    this.next = null;
+  }
+}
+
+class LinkedList {
+  #size;
+  #head;
+
+  // some of this methods can be implemented more easily by maintaining `tail` pointer
+
+  constructor() {
+    this.#head = null;
+    this.#size = 0;
+  }
+
+  getSize() {
+    return this.#size;
   }
 
   isEmpty() {
-    return this.#currentLength === 0;
-  }
-
-  isFull() {
-    return this.#currentLength === this.#capacity;
+    return this.#size === 0;
   }
 
   print() {
     if (this.isEmpty()) {
-      console.log('Queue is Empty.');
+      console.log("Linked list is empty");
       return;
     }
 
-    let i = NaN;
-    let el = ''
+    let curr = this.#head;
+    let el = "";
 
-    for (i = this.#front; i !== this.#rear; i = (i + 1) % this.#capacity) {
-      el += (this.#items[i]) + " ";
+    while (curr !== null) {
+      el += curr.value + " ";
+      curr = curr.next;
     }
-    el += (this.#items[i]);
 
     console.log(el);
   }
 
-  enqueue(val) {
-    if (!this.isFull()) {
-      this.#rear = (this.#rear + 1) % this.#capacity;
-      this.#items[this.#rear] = val;
-      this.#currentLength++;
-      if (this.#front === -1) {
-        this.#front = 0;
-      }
+  prepend(val) {
+    const node = new LNode(val);
+
+    if (this.isEmpty()) {
+      this.#head = node;
     } else {
-      console.log('Queue is full.');
+      node.next = this.#head;
+      this.#head = node;
     }
+
+    this.#size++;
   }
 
-  dequeue() {
+  append(val) {
+    const node = new LNode(val);
 
     if (this.isEmpty()) {
-      return null;
+      this.#head = node;
+    } else {
+      let curr = this.#head;
+
+      while (curr.next !== null) {
+        curr = curr.next;
+      }
+
+      curr.next = node;
     }
 
-    delete this.#items[this.#front];
-    this.#front++;
-    this.#currentLength--;
-
-    if (this.isEmpty()) {
-      this.#front = -1;
-      this.#rear = -1;
-    }
+    this.#size++;
   }
 
+  insert(val, idx) {
+    if (idx > this.#size || idx < 0) {
+      console.log("Invalid index");
+      return;
+    }
+
+    if (idx === 0) {
+      this.prepend(val);
+      return;
+    }
+
+    if (idx === this.#size) {
+      this.append(val);
+      return;
+    }
+
+    const node = new LNode(val);
+    let prev = this.#head;
+
+    for (let prt = 0; prt !== idx - 1; prt++) {
+      prev = prev.next;
+    }
+
+    node.next = prev.next;
+    prev.next = node;
+
+    this.#size++;
+  }
+
+  removeByIndex(idx) {
+    if (idx < 0 || idx >= this.#size) {
+      console.log("Invalid index");
+      return;
+    }
+
+    if (idx === 0) {
+      this.#head = this.#head.next;
+    } else {
+      let prev = this.#head;
+      for (let prt = 0; prt < idx - 1; prt++) {
+        prev = prev.next;
+      }
+
+      prev.next = prev.next.next;
+    }
+
+    this.#size--;
+  }
+
+  search(val) {
+    if (this.isEmpty()) {
+      return -1;
+    }
+
+    let curr = this.#head;
+    for (let i = 0; i < this.#size; i++) {
+      if (curr.value === val) {
+        return i;
+      }
+      curr = curr.next;
+    }
+
+    return -1;
+  }
+
+  reverse() {
+    let prev = null;
+    let curr = this.#head;
+
+    while (curr !== null) {
+      let next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
+    }
+
+    this.#head = prev;
+  }
 }
 
-const cqu = new CircularQueue(6)
+const ll = new LinkedList();
 
-cqu.enqueue(43)
-cqu.enqueue(67)
-cqu.enqueue(43)
-cqu.enqueue(67)
-cqu.enqueue(78)
-cqu.enqueue(78)
+ll.insert(92, 0);
+ll.insert(45, 0);
+ll.insert(98, 0);
+ll.insert(23, 0);
 
-cqu.dequeue()
-cqu.dequeue()
-cqu.dequeue()
+ll.print()
 
-cqu.enqueue(234)
+ll.reverse()
 
-cqu.print();
+ll.print()
