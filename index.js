@@ -1,56 +1,87 @@
-class Queue {
+class CircularQueue {
   #items;
+  #capacity;
   #front;
   #rear;
+  #currentLength;
 
-  constructor() {
-    this.#items = {};
-    this.#front = 0;
-    this.#rear = 0;
-  }
-
-  enqueue(val) {
-    this.#items[this.#rear] = val;
-    this.#rear++;
-  }
-
-  /**
-   * In previous approach we were using array where we used shift method to delete first item in dequeue
-   * which has O(n) time complexity, now here it's O(1) using object
-   */
-  dequeue() {
-    delete this.#items[this.#front];
-    this.#front++;
-  }
-
-  peek() {
-    return this.#items[this.#front];
+  constructor(capacity) {
+    this.#items = new Array(capacity);
+    this.#capacity = capacity;
+    this.#rear = -1;
+    this.#front = -1;
+    this.#currentLength = 0;
   }
 
   isEmpty() {
-    return this.#front - this.#rear === 0;
+    return this.#currentLength === 0;
   }
 
-  size() {
-    return this.#rear - this.#front;
+  isFull() {
+    return this.#currentLength === this.#capacity;
   }
 
   print() {
-    console.log(this.#items);
+    if (this.isEmpty()) {
+      console.log('Queue is Empty.');
+      return;
+    }
+
+    let i = NaN;
+    let el = ''
+
+    for (i = this.#front; i !== this.#rear; i = (i + 1) % this.#capacity) {
+      el += (this.#items[i]) + " ";
+    }
+    el += (this.#items[i]);
+
+    console.log(el);
   }
+
+  enqueue(val) {
+    if (!this.isFull()) {
+      this.#rear = (this.#rear + 1) % this.#capacity;
+      this.#items[this.#rear] = val;
+      this.#currentLength++;
+      if (this.#front === -1) {
+        this.#front = 0;
+      }
+    } else {
+      console.log('Queue is full.');
+    }
+  }
+
+  dequeue() {
+
+    if (this.isEmpty()) {
+      return null;
+    }
+
+    delete this.#items[this.#front];
+    this.#front++;
+    this.#currentLength--;
+
+    if (this.isEmpty()) {
+      this.#front = -1;
+      this.#rear = -1;
+    }
+  }
+
 }
 
-const qu = new Queue();
+const cqu = new CircularQueue(6)
 
-qu.enqueue(34);
-qu.enqueue(54);
-qu.enqueue(76);
-qu.enqueue(89);
+cqu.enqueue(43)
+cqu.enqueue(67)
+cqu.enqueue(43)
+cqu.enqueue(67)
+cqu.enqueue(78)
+cqu.enqueue(78)
 
-qu.print()
+cqu.dequeue()
+cqu.dequeue()
+cqu.dequeue()
 
-console.log(qu.peek(), qu.size(), qu.isEmpty());
+cqu.enqueue(234)
 
-qu.dequeue();
-
-qu.print()
+cqu.print();
