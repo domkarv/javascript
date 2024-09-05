@@ -15,22 +15,52 @@ class HashTable {
 
   set(key, value) {
     const index = this.hash(key);
-    this.table[index] = value;
+
+    const bucket = this.table[index];
+
+    if (!this.table[index]) {
+      this.table[index] = [[key, value]];
+    } else {
+      const sameKeyExists = bucket.find((item) => item[0] === key);
+
+      if (sameKeyExists) {
+        sameKeyExists[1] = value;
+      } else {
+        bucket.push([key, value]);
+      }
+    }
   }
 
   get(key) {
     const index = this.hash(key);
-    return this.table[index];
+
+    const bucket = this.table[index];
+
+    if (!bucket) return undefined;
+
+    const keyItem = bucket.find((item) => item[0] === key);
+
+    if (!keyItem) return undefined;
+
+    return keyItem;
   }
 
   remove(key) {
     const index = this.hash(key);
-    this.table[index] = undefined;
+
+    const bucket = this.table[index];
+
+    if (bucket) {
+      const keyItem = bucket.find((item) => item[0] === key);
+      if (keyItem) {
+        bucket.splice(bucket.indexOf(keyItem), 1);
+      }
+    }
   }
 
   display() {
     for (let i = 0; i < this.size; i++) {
-      if (this.table[i]) {
+      if (this.table[i] && this.table[i].length) {
         console.log(i, this.table[i]);
       }
     }
@@ -40,6 +70,7 @@ class HashTable {
 const ht = new HashTable(50);
 
 ht.set("name", "Omkar Date");
+ht.set("name", "Date Omkar");
 ht.set("age", 21);
 ht.set("role", "admin");
 
@@ -50,8 +81,10 @@ ht.set("post", "developer");
 // above both will generate same hash key as per our hash function
 // hash key generation totally depends on hash function implementation
 
+ht.display()
+
 console.log(ht.get("name"));
 
-ht.remove("role")
+ht.remove("stop")
 
 ht.display()
