@@ -43,13 +43,12 @@ ht.set("name", "Omkar Date");
 ht.set("age", 21);
 ht.set("role", "admin");
 
-// Example of collision
+/* Example of collision */
 ht.set("stop", "mumbai");
 ht.set("post", "developer");
 
 // above both will generate same hash key as per our hash function
 // hash key generation totally depends on hash function implementation
-
 
 console.log(ht.get("name"));
 
