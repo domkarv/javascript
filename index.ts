@@ -1,21 +1,11 @@
-function twoSum(nums: number[], target: number): number[] {
-  const mapp = new Map<number, number>();
-
+function linearSearch(nums: number[], target: number): number {
   for (let i = 0; i < nums.length; i++) {
-    const needed = target - nums[i];
-
-    const num = mapp.get(needed);
-
-    if (num !== undefined) {
-      return [num, i];
-    }
-
-    mapp.set(nums[i], i);
+    if (nums[i] === target) return i;
   }
 
-  return [];
+  return -1;
 }
 
-const nums = [2, 7, 11, 15];
+const nums = [2, 7, 11, 15, 34, 56, 52, 74, 56, 3];
 
-console.log(twoSum(nums, 9));
+console.log(linearSearch(nums, 65));
