@@ -1,19 +1,18 @@
-class Animal {
-  private name: string;
+const mostFrequent = (arr: string[]): string => {
+  const mapping: Record<string, number> = arr.reduce((acc, el) => {
+    acc[el] = acc[el] ? acc[el] + 1 : 1;
+    return acc;
+  }, {});
 
-  constructor({ name }: { name: string }) {
-    this.name = name;
-  }
+  // console.log(mapping);
+  // console.log(Object.entries(mapping));
 
-  get Name() {
-    return this.name;
-  }
+  return Object.entries(mapping).reduce(
+    (acc, el) => (el[1] > acc[1] ? el : acc),
+    ["", 0]
+  )[0] as string;
+};
 
-  set Name(name: string) {
-    this.name = name;
-  }
-}
+const myStrings = ["Hello", "world", "omkar", "world", "an", "array"];
 
-const dog = new Animal({ name: "Tiger" });
-
-console.log(dog.Name);
+mostFrequent(myStrings);
