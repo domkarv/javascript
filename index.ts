@@ -1,18 +1,32 @@
-const mostFrequent = (arr: string[]): string => {
-  const mapping: Record<string, number> = arr.reduce((acc, el) => {
-    acc[el] = acc[el] ? acc[el] + 1 : 1;
-    return acc;
-  }, {});
+function mergeSortedArrays(arr1: number[], arr2: number[]) {
+  const mergedArray: number[] = [];
+  let i = 0;
+  let j = 0;
 
-  // console.log(mapping);
-  // console.log(Object.entries(mapping));
+  while (i < arr1.length && j < arr2.length) {
+    if (arr1[i] < arr2[j]) {
+      mergedArray.push(arr1[i]);
+      i++;
+    } else {
+      mergedArray.push(arr2[j]);
+      j++;
+    }
+  }
 
-  return Object.entries(mapping).reduce(
-    (acc, el) => (el[1] > acc[1] ? el : acc),
-    ["", 0]
-  )[0] as string;
-};
+  while (i < arr1.length) {
+    mergedArray.push(arr1[i]);
+    i++;
+  }
 
-const myStrings = ["Hello", "world", "omkar", "world", "an", "array"];
+  while (j < arr2.length) {
+    mergedArray.push(arr2[j]);
+    j++;
+  }
 
-mostFrequent(myStrings);
+  return mergedArray;
+}
+
+const arr1 = [1, 3, 5, 7];
+const arr2 = [2, 4, 6, 8];
+
+console.log(mergeSortedArrays(arr1, arr2));
